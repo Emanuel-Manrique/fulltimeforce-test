@@ -31,7 +31,7 @@ export class GithubController {
   @ApiResponse({ status: 404, description: 'Repository not found.' })
   async getCommits(
     @Query('owner') owner: string = 'Emanuel-Manrique',
-    @Query('repo') repo: string = 'StreetBattler2D',
+    @Query('repo') repo: string = 'fulltimeforce-test',
   ): Promise<any> {
     return this.githubService.getCommits(owner, repo);
   }
