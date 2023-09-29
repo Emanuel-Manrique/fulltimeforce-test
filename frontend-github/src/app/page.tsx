@@ -9,6 +9,7 @@ export default function Home() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [filteredCommits, setFilteredCommits] = useState<any[]>([]);
+  const [expandedCommit, setExpandedCommit] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCommits = async () => {
@@ -66,15 +67,36 @@ export default function Home() {
           <ul>
             {filteredCommits.map((commit) => (
               <li key={commit.sha} className="border-b-2 py-4">
-                <div className="flex justify-between">
-                  <span className="font-bold text-lg text-purple-600">
-                    {commit.commit.author.name}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {new Date(commit.commit.author.date).toLocaleDateString()}
-                  </span>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="font-bold text-lg text-purple-600">
+                      {commit.commit.author.name}
+                    </span>
+                    <span className="ml-4 text-sm text-gray-500">
+                      {new Date(commit.commit.author.date).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() =>
+                      setExpandedCommit(
+                        expandedCommit === commit.sha ? null : commit.sha
+                      )
+                    }
+                    className="bg-gray-200 p-1 rounded"
+                  >
+                    {expandedCommit === commit.sha ? "-" : "+"}
+                  </button>
                 </div>
-                <p className="mt-2 text-gray-700">{commit.commit.message}</p>
+                {expandedCommit === commit.sha && (
+                  <div className="mt-4">
+                    <p>
+                      <strong>Email:</strong> {commit.commit.author.email}
+                    </p>
+                    <p>
+                      <strong>Message:</strong> {commit.commit.message}
+                    </p>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
